@@ -1,0 +1,70 @@
+import java.util.Scanner;
+
+public class Puzzle5 {
+	public static Scanner reader= new Scanner(System.in);
+    public static void main(String[] args){
+    	int sum=0,cnt=0;
+    	String str="";
+    	str=reader.nextLine();
+    	int[][] ar = new int[127][8];
+    	int[] arr= new int[908];
+    	int[] checkmissingid= new int[1000];
+    	while(str.length() >0) {
+			int maxr=127,minr=0,maxc=7,minc=0,row=0,col = 0;
+	    	for(int i=0;i<str.length();i++) {
+	    		if(str.charAt(i)=='F') {
+	    			maxr=(int)((maxr+minr)/2);
+	    			if(i==6) {
+	    				row=maxr;
+	    			}
+	    		}
+	    		else if(str.charAt(i)=='B') {
+	    			minr=(int)((maxr+minr+1)/2);
+	    			if(i==6) {
+	    				row=minr;
+	    			}
+	    		}
+	    		if(str.charAt(i)=='R') {
+	    			minc=(maxc+minc+1)/2;
+	    			if(i==9) {
+	    				col=minc;
+	    			}
+	    		}
+	    		else if(str.charAt(i)=='L') {
+	    			maxc=(maxc+minc)/2;
+	    			if(i==9) {
+	    				col=maxc;
+	    			}
+	    		}
+	    		if(i==9) {
+	    	       sum=Math.max(sum, (int)(row*8+col));//solution for part1 comes from this line
+	    			sum=row*8+col;
+	    			arr[cnt]=sum;
+	    			ar[row][col]=1;
+	    			cnt++;
+	    		}
+	    	}
+	    	str=reader.nextLine();
+    } 
+    	int g=0;
+		for(int i=0;i<ar.length;i++) {
+    		for(int j=0;j<ar[0].length;j++) {
+    			if(ar[i][j]!=1) {
+    				checkmissingid[g]=i*8+j;
+    				g++;
+					System.out.println(checkmissingid.length);
+
+    			}
+    		}
+    		}
+		for(int i=0;i<arr.length;i++) {
+			for(int d=0;d<arr.length;d++) {
+				for(int j=0;j<checkmissingid.length;j++) {
+					if(arr[i]-1==checkmissingid[j] && arr[d]+1==checkmissingid[j]) {
+						System.out.println(checkmissingid[j]);
+					}
+				}
+    		}
+    		}
+    }
+}
