@@ -1,0 +1,122 @@
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Scanner;
+public class Puzzle7 {
+	//part1
+
+	  public static Scanner reader= new Scanner(System.in);
+	    public static String[] GetAll(String st){
+	        String[] list = st.split("bags contain \\d | bags, \\d | bag, \\d | bags\\.| bag\\.");
+	        if(list.length>1) {
+	            return Arrays.copyOfRange(list, 1, list.length);
+	        }
+	        return new String[0];
+	    }
+
+	    public static String GetName(String st){
+	        return st.split("bags")[0];
+	    }
+
+	    static boolean isInArr(String[] arr,String looking){
+	        for (String s:arr){
+	            if(s.strip().equals(looking.strip())){
+	                return true;
+	            }
+	        }
+	        return false;
+	    }
+	    public static int cnt(HashMap<String,String[]> hm, String color, int count){
+	        for(String key:hm.keySet()){
+	            // if the key contains the color were looking for
+	            if(isInArr(hm.get(key),color)){
+
+	                //add one to count
+	                //search for al.f.l of the key appearences
+	                System.out.println(key+" "+count);
+	                hm.replace(key,new String[0]);
+	                count+=cnt(hm,key,0)+1;
+	            }
+	        }
+	        return count;
+	    }
+
+
+	    public static void main(String[] args) {
+	        HashMap<String,String[]> hm = new HashMap<>();
+	        String input=reader.nextLine();
+	        while(!input.equals("-1")){
+	            hm.put(GetName(input),GetAll(input));
+	            input=reader.nextLine();
+	        }
+	        System.out.println("");
+	        int c =cnt(hm,"shiny gold",0);
+	        System.out.println(c);
+	    }
+
+	    public static void printArr(String[] arr){
+	        if(arr==null){
+	            System.out.println("null");
+	            return;
+	        }
+	        for(String s: arr){
+	            System.out.print(s+", ");
+	        }
+	        System.out.println("");
+	    }
+
+}
+//part2:
+
+//public static Scanner reader= new Scanner(System.in);
+//public static List<String> GetAll(String st){
+//    Pattern p = Pattern.compile("\\d+\\s\\w+\\s\\w+");
+//    Matcher m = p.matcher(st);
+//    List<String> list = new ArrayList<>();
+//    while(m.find()){
+//        String found = m.group();
+//        //get the number by removing everything which is not a digit
+//        int i = Integer.parseInt(found.replaceAll("[^\\d]+", ""));
+//        //add n copies of the matched string after removing the digit
+//        list.addAll(Collections.nCopies(i, found.replaceAll("\\d+", "").trim()));
+//    }
+//    return list;
+//}
+//
+//public static String GetName(String st){
+//    return st.split("bags")[0].stripTrailing();
+//
+//}
+//static boolean isInArr(String[] arr,String looking){
+//    for (String s:arr){
+//        if(s.strip().equals(looking.strip())){
+//            return true;
+//        }
+//    }
+//    return false;
+//}
+//public static void main(String[] args) {
+//    HashMap<String,List<String>> hm = new HashMap<>();
+//    String input=reader.nextLine();
+//    while(!input.equals("-1")){
+//         hm.put(GetName(input),GetAll(input));
+//        input=reader.nextLine();
+//    }
+//    int cc= cnt(hm,"shiny gold",0);
+//    System.out.println(cc);
+//
+//}
+//public static int cnt(HashMap<String, List<String>> hm,String color,int cnt) {
+//    for(String s: hm.get(color)){
+//        cnt = cnt(hm, s, cnt) + 1;
+//    }
+//    return cnt;
+//}
+//light red bags contain 1 bright white bag, 2 muted yellow bags.
+//dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+//bright white bags contain 1 shiny gold bag.
+//muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+//shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+//dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+//vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+//faded blue bags contain no other bags.
+//dotted black bags contain no other bags.
