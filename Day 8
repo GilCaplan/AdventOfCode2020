@@ -1,0 +1,91 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Puzzle8 {
+	public static Scanner reader= new Scanner(System.in);
+
+	  public static List<String> getInput(List<String> input) {//puts each line into a list and returns the list
+			String s= reader.nextLine();
+	    	while(!s.equals("-1")) {
+	    		input.add(s);
+		    	s= reader.nextLine();
+	    	}
+			return input;
+		}
+
+
+	  public static void main(String[] args){
+		  ArrayList<String> input = new ArrayList<String>();
+		  List<Integer> trySwitching = new ArrayList<Integer>();
+			String s= reader.nextLine();
+			int x=0;
+	    	while(!s.equals("-1")) {
+	    		input.add(s);
+			      if (s.startsWith("nop") || s.startsWith("jmp"))
+			          trySwitching.add(x); // logs location of all commands that we will try switch
+			          x++;
+				      s= reader.nextLine();
+			  }
+	
+		  int acc = 0;
+		  int i = 0;
+		  int v=0;
+		  
+		  while (i < input.size()) {
+		      ArrayList<String> inputRevised = new ArrayList<String>(input); // make a copy of input and then switch one jmp/nop
+		      int z = trySwitching.get(v);
+		      if (inputRevised.get(z).contains("jmp"))
+		          inputRevised.set(z, inputRevised.get(z).replace("jmp", "nop"));
+		      else if (inputRevised.get(z).contains("nop"))
+		          inputRevised.set(z, inputRevised.get(z).replace("nop", "jmp"));
+		     
+		      acc = 0;
+		      i = 0;
+		      boolean[] used = new boolean[inputRevised.size()];
+		      while (i < inputRevised.size() && used[i] == false) {
+		          String[] command = inputRevised.get(i).split(" ");
+		          if (command[0].equals("acc")) {
+		              acc += Integer.parseInt(command[1]);
+		              used[i] = true;
+		              i++;
+		          } else if (command[0].equals("jmp")) {
+		              used[i] = true;
+		              i += Integer.parseInt(command[1]);
+		          } else if (command[0].equals("nop")) {
+		              used[i] = true;
+		              i++;
+		          }
+		      }
+		      v++;
+		  }
+	
+		  System.out.println(acc);
+	  }
+	
+	public static void part1() {
+		List<String> input = new ArrayList<String>();
+		getInput(input);
+      
+		int acc = 0;
+		int i = 0;
+		boolean[] used = new boolean[input.size()]; 
+		while (used[i] == false) {
+		    String[] command = input.get(i).split(" ");
+		    if (command[0].equals("acc")) {
+		        acc += Integer.parseInt(command[1]);
+		        used[i] = true;
+		        i++;
+		    } else if (command[0].equals("jmp")) {
+		        used[i] = true;
+		        i += Integer.parseInt(command[1]);
+		    } else if (command[0].equals("nop")) {
+		        used[i] = true;
+		        i++;
+		    }
+		}
+
+		System.out.println(acc);
+	}
+	}
