@@ -1,0 +1,68 @@
+public class Puzzle9 {
+	public static Scanner reader= new Scanner(System.in);
+	  public static long[] getInput() throws IOException {//puts each line into a list and returns the list
+		  long[] input =new long[1001];
+		  input[0]= Long.valueOf(reader.nextLine());
+		  String str="1";
+		   int i=1;
+		   while(!str.equals("-1")) {
+	    		input[i] =Long.valueOf(reader.nextLine());
+	    		if(input[i]==-1) {
+	    			str="-1";
+	    		}
+	    		i++;
+	    	}
+			return input;
+		}
+	  public static List<Long> set25(int x,int y,long[] input){//takes previous 25 numbers
+		  List<Long> set = new ArrayList<Long>();
+		  for(int i=x;i<y;i++) {//
+			  set.add(input[i]);
+		  }
+
+		  return set;
+	  }
+	  public static long check1(int i, long[] input) {//gets current index and input and 25list
+		  List<Long> set=set25(i-25,i,input);
+		  List<Long> sum=new ArrayList<Long>();
+		  for(int j=0;j<25;j++) {
+		      for(int g=0;g<25;g++) {
+		    		sum.add(set.get(j)+set.get(g));
+		    }
+		  }
+		      boolean check=true;
+		    for(int h=0;h<sum.size();h++) {
+		    	if(input[i]==sum.get(h)) {check=false;}
+		    }
+		    if(check==true && input[i]!=-1) {return input[i];}
+		    
+		  return 0;
+	  }
+	  public static void part2(long[] input) {
+		  long number = 70639851;
+	        for (int i = 0; input[i] < number; i++){
+	            int j = i;
+	            long sum = 0,min = 999999999, max = 0;
+	            while (sum < number){
+	                long check = input[j];
+	                min=Math.min(min, check);
+	                max=Math.max(max, check);
+	                sum += check;
+	                j++;
+	            }
+	            if (sum == number){
+	                System.out.println(min + max);
+	            }
+	        }
+	  }
+	  public static void main(String[] args) throws IOException {
+		  long[] input=getInput();
+		  for(int j=25;j<input.length;j++) {
+			  long answer= check1(j,input);
+			  if(answer!=0) {
+				  System.out.println(answer+"    hi  70639851  ");
+			  }
+			  part2(input);
+		  }
+	  }
+}
