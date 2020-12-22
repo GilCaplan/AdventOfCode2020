@@ -1,0 +1,43 @@
+public class Puzzle13 {
+	  public static Scanner reader= new Scanner(System.in);
+	  static int TimeLeft(int busId, long time){
+	      int timeLeft = (int)(time % busId);
+	      if (timeLeft > 0)
+	      {timeLeft = busId - timeLeft; }
+	      return timeLeft;
+	  }
+	  public static void part1() {
+		  long EarliestTime= Integer.valueOf(reader.nextLine());
+			int min= Integer.MAX_VALUE,sum=0;
+			String stamps=reader.nextLine();
+			for(String s:stamps.split(",")) {
+				if(s=="x"|s.matches("x")) {}
+				else {
+					min= Math.min(min, TimeLeft(Integer.valueOf(s),EarliestTime));
+					if(TimeLeft(Integer.valueOf(s),EarliestTime)==min) {
+						sum= Integer.valueOf(s)*min;
+					}
+				}
+			}
+			System.out.println(sum);
+	  }
+	  public static void part2() {
+		  String[] stamps=reader.nextLine().split(",");;
+		        long time = 0, increase = Long.valueOf(stamps[0]);
+		        for (int i = 1; i < stamps.length; i++){
+		            if (!stamps[i].equals("x")){
+		                int newTime = Integer.valueOf(stamps[i]);
+		                while (true){
+		                    time += increase;
+		                    if ((time + i) % newTime == 0){
+		                        increase *= newTime;
+		                        break;
+		                    }}}}
+		        System.out.println( time);
+		    }
+	  
+		public static void main(String args[]) {
+			part1();
+			part2();
+		}
+}
