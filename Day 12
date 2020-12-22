@@ -1,0 +1,150 @@
+public class Puzzle12 {
+	  public static Scanner reader= new Scanner(System.in);
+
+	public static ArrayList<String> getInput() {//gets input
+		ArrayList<String> input = new ArrayList<String>();
+		String str="";int i=0;
+		while(!str.equals("-1")) {
+			 String g=reader.nextLine();
+			 if(!g.equals("-1")) {
+				input.add(g); }
+			 else {str="-1";}
+			 i++;
+			}
+		return input;
+	}
+
+	  public static void part1() {
+	        int x = 0;
+			int y = 0;
+			int face = 1; // 0:N, 1:E, 2:S, 3:W
+
+			for (String in : getInput()) {
+				String dir = in.substring(0, 1);
+				int num = Integer.parseInt(in.substring(1));
+
+				if (dir.equals("E")) {
+					x += num;
+				} else if (dir.equals("S")) {
+					y -= num;
+				} else if (dir.equals("W")) {
+					x -= num;
+				} else if (dir.equals("N")) {
+					y += num;
+				} else if (dir.equals("R")) {
+					num /= 90;
+					face += num;
+					face = face % 4;
+				} else if (dir.equals("L")) {
+					num /= 90;
+					face -= num;
+					face = face % 4;
+					if (face < 0)
+						face += 4;
+				} else if (dir.equals("F")) {
+					if (face == 0) // north
+						y += num;
+					if (face == 1) // east
+						x += num;
+					if (face == 2) // south
+						y -= num;
+					if (face == 3) // west
+						x -= num;
+				}
+
+			}
+
+			int manDis = Math.abs(x) + Math.abs(y);
+			System.out.println("Manhattan distance: " + manDis);
+
+	  }
+
+	  public static void part2() {
+	    int shipNS = 0;
+			int shipEW = 0;
+			int wpEW = 10; // +:east, -:west
+			int wpNS = 1; // +:north, -:south
+
+			for (String in :getInput()) {
+				String dir = in.substring(0, 1);
+				int num = Integer.parseInt(in.substring(1));
+
+				if (dir.equals("R") || dir.equals("L")) {
+					int tempEW = wpEW;
+					int tempNS = wpNS;
+					wpEW = updateEW(dir, num, tempEW, tempNS);
+					wpNS = updateNS(dir, num, tempEW, tempNS);
+				} else if (dir.equals("F")) {
+					for (int i = 1; i <= num; i++) {
+						shipNS += wpNS;
+						shipEW += wpEW;
+					}
+				} else if (dir.equals("N")) {
+					wpNS += num;
+				} else if (dir.equals("E")) {
+					wpEW += num;
+				} else if (dir.equals("S")) {
+					wpNS -= num;
+				} else if (dir.equals("W")) {
+					wpEW -= num;
+				}
+
+			}
+
+			int manDis = Math.abs(shipNS) + Math.abs(shipEW);
+			System.out.println("Manhattan distance: " + manDis);
+
+		}
+
+		private static int updateNS(String d, int n, int ew, int ns) {
+			if (d.equals("R")) {
+				if (n == 90) {
+					ns = -ew;
+				} else if (n == 180) {
+					ns = -ns;
+				} else if (n == 270) {
+					ns = ew;
+				}
+			} else if (d.equals("L")) {
+				if (n == 90) {
+					ns = ew;
+				} else if (n == 180) {
+					ns = -ns;
+				} else if (n == 270) {
+					ns = -ew;
+				}
+			}
+
+			return ns;
+
+		}
+
+		private static int updateEW(String d, int n, int ew, int ns) {
+			if (d.equals("R")) {
+				if (n == 90) {
+					ew = ns;
+				} else if (n == 180) {
+					ew = -ew;
+				} else if (n == 270) {
+					ew = -ns;
+				}
+			} else if (d.equals("L")) {
+				if (n == 90) {
+					ew = -ns;
+				} else if (n == 180) {
+					ew = -ew;
+				} else if (n == 270) {
+					ew = ns;
+				}
+			}
+
+			return ew;
+	  
+	  }
+	
+	public static void main(String args[]) {
+//		part1();
+		part2();
+	}
+}
+
