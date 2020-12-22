@@ -1,0 +1,37 @@
+import java.util.Scanner;
+public class Advent3 {
+	public static Scanner reader= new Scanner(System.in);
+	public static int part1(int right,  int down) {
+		int b=0,cnt=0;
+		String str="";
+		char charsign;
+		str=reader.nextLine();
+		while(str.length() != 0) {
+    		if(b%str.length() == 0) {
+    			charsign = str.charAt(0);
+    		}
+    		else {
+    			charsign = str.charAt(b%str.length());
+    		}
+			if(charsign == '#') {
+				cnt++;
+			}
+			b+=right;
+			if(down==2) {
+				str=reader.nextLine();
+				str=reader.nextLine();
+			}
+			else
+				str=reader.nextLine();
+			}
+		return cnt;
+	}
+    public static void main(String[] args){
+    	int mul=0;
+    	int[] m= new int[]{part1(1,2),part1(3,1),part1(5,1),part1(7,1),part1(1,2)};
+    	for(int i=0;i<m.length;i++) {
+    		mul+=m[i];
+    	}
+    	System.out.println(mul);
+    }
+    }
