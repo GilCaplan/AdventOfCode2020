@@ -1,0 +1,95 @@
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+public class advent2 {
+	public static Scanner reader= new Scanner(System.in);
+	public static void part1() {
+		 int cnt2=0;
+	        String a1="";
+	        String a2="";
+	        String a3="";
+	        int cnt=0;
+	        String regexp = "(?<one>\\d+-\\d+)\\s*(?<two>\\w+)\\s*:\\s*(?<three>\\w+)";
+	        Pattern pattern = Pattern.compile(regexp);
+	        String str = reader.nextLine();
+	        while (!str.equals("-1")) {
+
+	            System.out.println(str);
+	            cnt++;
+
+	            Matcher matcher = pattern.matcher(str);
+	            if (matcher.matches()) {
+	                a1= matcher.group("one");
+	                a2= matcher.group("two");
+	                a3= matcher.group("three");
+	            }
+	            int min=Integer.parseInt( ""+ a1.split("-")[0]);
+	            int max=Integer.parseInt( ""+  a1.split("-")[1]);
+	            int acurences =("!"+a3+"!").split(a2).length-1;
+	            if(acurences>=min &&acurences<=max) {
+	                cnt2++;
+	            }
+	            str = reader.nextLine();
+	        }
+	        System.out.println(cnt);
+	        System.out.println(cnt2);
+
+	    }
+	public static void part2() {
+		int cnt2=0;
+        String a1="";
+        String a2="";
+        String a3="";
+        int cnt=0;
+        String regexp = "(?<one>\\d+-\\d+)\\s*(?<two>\\w+)\\s*:\\s*(?<three>\\w+)";
+        Pattern pattern = Pattern.compile(regexp);
+        String str = reader.nextLine();
+        while (!str.equals("-1")) {
+
+            System.out.println(str);
+            cnt++;
+
+            Matcher matcher = pattern.matcher(str);
+            if (matcher.matches()) {
+                a1= matcher.group("one");
+                a2= matcher.group("two");
+                a3= matcher.group("three");
+            }
+            int min=Integer.parseInt( ""+ a1.split("-")[0]);
+            int max=Integer.parseInt( ""+  a1.split("-")[1]);
+            if(a3.charAt(min-1) == a2.charAt(0)||a3.charAt(max-1) == a2.charAt(0) ) {
+            	if(a3.charAt(min-1) == a2.charAt(0)&&a3.charAt(max-1) == a2.charAt(0)) {
+            		
+            	}
+            	else {
+            		cnt2++;
+            	}
+            }
+            str = reader.nextLine();
+        }
+        System.out.println(cnt);
+        System.out.println(cnt2);
+
+	}
+		
+    public static void main(String[] args){
+    			part1();
+    			part2();
+    }
+}
+//part1 as python code- 
+//import re
+//
+//new = []
+//x = input()
+//while x != "-1":
+//    new.append(re.split(": ", x))
+//    x = input()
+//
+//count = 0
+//for i in new:
+//    min = int(re.split("[- ]", i[0])[0])
+//    max = int(re.split("[- ]", i[0])[1])
+//    num = str.count(i[1], re.split("[- ]", i[0])[2])
+//    if num >= min and num <= max:
+//        count += 1
