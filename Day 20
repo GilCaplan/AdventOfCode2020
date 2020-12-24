@@ -1,0 +1,78 @@
+import java.util.HashMap;
+import java.util.Scanner;
+public class Puzzle20 {
+	  public static Scanner reader= new Scanner(System.in);
+//	  public static HashMap<Integer,>
+	public static HashMap<Integer,String[]> getinput() {//gets input
+		HashMap<Integer,String[]> input= new HashMap<Integer,String[]>();
+	  	char[][] lines= new char[10][10];
+	    String str="",key="";int row=0;
+		while (!str.equals("-1")) {
+			String a=reader.nextLine();
+			if(a.equals("-1")) {str="-1";}
+			else if(a.matches(".*\\d.*")) {
+				key=a.replaceAll("Tile|\\s+|:", "");
+				
+			}
+			else if(!a.equals("")){
+				for(int i=0;i<a.length();i++) {
+					lines[i][row]=a.charAt(i);
+				}row++;}
+			if(a.equals("")) {input.put(Integer.valueOf(key),value(lines));row=0;}}
+			return input;
+	  }
+	public static String[] value(char[][] lines) {
+		String top="",bottom="",left="",right="";
+		for(int i=0;i<lines.length;i++) {//top row
+			top+=lines[i][0];
+		}
+		for(int i=0;i<lines.length;i++) {//bottom row
+			bottom+=lines[i][lines[0].length-1];
+		}
+		for(int i=0;i<lines[0].length;i++) {//leftside
+			left+=lines[0][i];
+		}
+		for(int i=0;i<lines[0].length;i++) {//rightside
+			right+=lines[lines.length-1][i];
+		}
+				
+		String[] line= new String[] {top,bottom,left,right};//top,bottom, left,right
+
+		return line;
+	}
+	public static int checkcorner(HashMap<Integer,String[]> input,int checkTile) {
+		int cnt=0;
+		for(int tile: input.keySet()) {
+			int counter =checker(input.get(tile), input.get(checkTile));
+			if(counter<4) {cnt+=counter;}
+		}
+		if(cnt==2) {System.out.println(checkTile);return checkTile;}
+		else {return 1;	}
+	}
+	public static int checker(String[] myinput, String[] checks) {
+		int counter=0;
+		for(String check: checks) {
+			if(check.equals(myinput[0]) || check.equals(myinput[1]) || check.equals(myinput[2]) || check.equals(myinput[3])) {counter++;}
+			check=reverse(check);
+			if(check.equals(myinput[0]) || check.equals(myinput[1]) || check.equals(myinput[2]) || check.equals(myinput[3])) {counter++;}
+		}			
+
+		return counter;
+	}
+	public static String reverse(String myTile){
+        StringBuilder tile = new StringBuilder(myTile).reverse();
+        return tile.toString();
+    }
+	public static void part1() {
+		long sum=1;
+		HashMap<Integer,String[]> input=getinput();
+		for(int checkTile: input.keySet()) {
+			sum*=checkcorner(input,checkTile);
+		}
+		System.out.println("part1:  "+ sum);
+	}
+	
+    public static void main(String[] args) {
+    	part1();
+    }
+}
