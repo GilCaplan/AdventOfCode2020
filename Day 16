@@ -1,0 +1,42 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Puzzle16 {
+	  public static Scanner reader= new Scanner(System.in);
+	  public static void main(String[] args) {
+		  part1();
+	  }
+	  public static void part1() {
+		  List<Integer> rules = new ArrayList<Integer>();
+		  input input= new input();String amin="",bmax="";
+		  String rule=input.getrules();int sum=0;
+		  String nearby= input.getNearby();
+		  for(String s: rule.split("\r\n|\\s+")) {
+			  for(String g: s.split("[a-zA-Z\\s+]{3,20}|\\s+|or|:")) {
+					  for(String min:g.split("-[0-9]{1,3}") ) {amin=min;}
+					  for(String max:g.split("[0-9]{1,3}-") ) { bmax=max;}
+					  forLoopRange(Integer.valueOf(amin),Integer.valueOf(bmax), rules);
+			  }
+		  }
+		  for(String number: nearby.split("\r\n|,")) {
+			  boolean check=false;
+			  for(int rulenum:rules) {
+				  if(Integer.valueOf(number)==rulenum) {
+					  check=true;
+				  }
+			  }
+			  if(check==false) {
+				 sum+=Integer.valueOf(number);
+			  }
+		  }
+		  System.out.println(sum);
+		  
+	  }
+	  public static void forLoopRange(int a, int b,List<Integer> rule) {
+			   for (int i = a; i <= b; i++) {
+			        rule.add(i);
+			    }
+			}
+	  }
+
