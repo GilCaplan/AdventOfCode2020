@@ -1,0 +1,84 @@
+import java.util.HashMap;
+public class Puzzle19 {
+	static input19 input= new input19();//constructer with the inputs
+	public static String rules=input.getrules();
+	public static String message= input.getinput();
+	public static HashMap<Integer, String> getrule() {//places rules in the hm
+	  HashMap<Integer,String> hm= new HashMap<Integer,String>();
+	  for(String r: rules.split("\r\n")) {
+		  String n[] = r.split(":");
+		  Integer key = Integer.valueOf(n[0]);
+		  String value = n[1].replaceAll("\"", "");
+//		  System.out.println(key +"  "+ value);
+		  hm.put(key, value);
+	  }
+	  return hm;
+	  }
+    public static String recu(HashMap<Integer,String> hm, int i) {
+    	while(hm.get(i).matches(".*\\d.*")) {
+    		String rec="";
+	    	for(String k: hm.get(i).split(" ")) {
+	    		if(k.matches("[0-9]{1,3}|\\d+")) {
+	    			if (hm.get(Integer.valueOf(k)).matches("[ab]")) {
+	    	          rec += hm.get(Integer.valueOf(k));
+	    	        } else {
+	    	          rec += "( " + hm.get(Integer.valueOf(k)) + " )";
+	    	        }
+	    		}
+	    		else {
+	    	        rec += k;
+	    	      }
+	    	}
+	    	hm.replace(i, rec);	 
+    	}
+    	return "(" + hm.get(i).replaceAll("\\s+", "") + ")";
+    }
+    public static int cnt(String rec, String message) {//counts answer for part1
+    	int cnt=0;
+    	for(String s: message.split("\r\n")) {
+    			if(s.matches(rec)) {cnt++;}
+    		}
+    	return cnt;
+    }
+
+	public static void part1() {
+		HashMap<Integer,String> hm=getrule();//contains all the rules works
+		String rec="^" +recu(hm,0)+ "$";//doesn't work properly
+		System.out.println("part1:  "+cnt(rec, message));
+	} 
+	public static void part2() {
+		HashMap<Integer,String> hm=getrule();//contains all the rules works
+			  String r42 = recu(hm, 42);
+			  String r31 = recu(hm, 31);
+			  String masterRegex = "^((42+) ((42 31) | (42{2} 31{2}) | (42{3} 31{3}) | (42{4} 31{4}) | (42{5} 31{5}) | (42{6} 31{6}) | (42{7} 31{7}) | (42{8} 31{8}) | (42{9} 31{9}) | (42{10} 31{10})))$";
+			  masterRegex = masterRegex.replace("42", r42).replace("31", r31).replace(" ", "");
+			  int count = 0;
+			  for (String m : message.split("\r\n")) {
+			    if (m.matches(masterRegex)) {
+			      count++;
+			  } 
+			}
+			  System.out.println("Valid messages: " + count);
+	}
+	public static void main(String[] args) {
+		part1();
+		part2();
+	}
+	}
+
+public class input19 {
+	public static String inputrules=
+			"";
+	public static String input=
+			"";
+	input19() {
+		this.input=input;
+		this.inputrules=inputrules;
+	}
+	public String getinput() {
+		return this.input;
+	}
+	public String getrules() {
+		return this.inputrules;
+	}
+}
