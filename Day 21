@@ -1,0 +1,63 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
+public class Puzzle21 {
+	  public static Scanner reader= new Scanner(System.in);
+	    public static List<String> getinput(){
+	    	List<String> l= new ArrayList<String>();
+	    	String str="",line="";
+	    	while (!str.equals("-1")) {
+	    		line=reader.nextLine();
+				if(line.equals("-1")) {str="-1";}
+				else{
+					l.add(line);
+				}
+				
+	    }
+			return l;
+	    }
+	    	
+	    	public static void main(String[] args) {
+	    		List<String> lines = getinput();
+	            Set<String> allergies = new HashSet<>();
+	            Set<String> ingredients = new HashSet<>();
+	            Map<String, Integer> counts = new HashMap<>();
+	            for (String line : lines) {
+	                String[] parts = line.split(" \\(contains ");
+	                for (String ingr : parts[0].split(" ")) {
+	                    ingredients.add(ingr);
+	                    counts.merge(ingr, 1, (a, b) -> a + b);
+	                }
+	                for (String aller : parts[1].replace(')', ' ').trim().split(", ")) {
+	                    allergies.add(aller.trim());
+	                }
+	            }
+	            HashMap<String, Set<String>> possible = new HashMap<>();
+	            for (String aller : allergies) {
+	                possible.put(aller, new HashSet<>(ingredients));
+	            }
+	            for (String line : lines) {
+	                String[] parts = line.split(" \\(contains ");
+	                List<String> ingrs = Arrays.asList(parts[0].split(" "));
+	                for (String aller : parts[1].replace(')', ' ').trim().split(", ")) {
+	                    for (String ingr : ingredients) {
+	                        if (!ingrs.contains(ingr)) { possible.get(aller).remove(ingr); }
+	                    }
+	                }
+	            }
+	            int cnt = 0;
+	            couter: for (String ingr : ingredients) {
+	                for (Set<String> poss : possible.values()) {
+	                    if (poss.contains(ingr)) { continue couter; }
+	                }
+	                cnt += counts.get(ingr);
+	            }
+	            System.out.println(cnt);
+	        }
+}
