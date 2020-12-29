@@ -1,0 +1,118 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+import java.awt.geom.Point2D;
+public class Puzzle24 {
+	 public static Scanner reader= new Scanner(System.in);
+	public static List<String> lines  = getinput();
+	public static List<String> getinput() {
+	       String str="";
+	       List<String> lines= new ArrayList<String>();
+			while (!str.equals("-1")) {
+				String a=reader.nextLine();
+				if(a.equals("-1")) {str="-1";}
+				else lines.add(a);
+			}
+			return lines;
+	  }
+    public static void main(String[] args) {
+    	part1();
+    	part2();
+    }
+
+    private enum HexDirection {
+        E(0, 1), W(0, -1), NE(1, 0), NW(1, -1), SE(-1, 1), SW(-1, 0);
+
+        public final int x;
+        public final int y;
+
+        private HexDirection(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    public static void part2() {
+    	Map<Point2D, Integer> counts = new HashMap<>();
+    	for (String line : lines) {
+            int x = 0;
+            int y = 0;
+            for (int i = 0; i < line.length(); i++) {
+                char c = line.charAt(i);
+                String s = "" + c;
+                if (c == 'n' || c == 's') {
+                    s += line.charAt(i + 1);
+                    i++;
+                }
+
+                HexDirection h = HexDirection.valueOf(s.toUpperCase());
+                x += h.x;
+                y += h.y;
+            }
+			Point2D p=new Point2D.Double(x, y);
+            counts.merge(p, 1, (a, b) -> a + b);
+        }
+
+        Set<Point2D> black = new HashSet<>();
+        for (Entry<Point2D, Integer> e : counts.entrySet()) {
+            if (e.getValue() % 2 == 1) { black.add(e.getKey()); }
+        }
+
+        for (int i = 0; i < 100; i++) {
+            Map<Point2D, Integer> ncounts = new HashMap<>();
+            for (Point2D b : black) {
+                ncounts.merge(b, 0, (o, n) -> o);
+                for (HexDirection h : HexDirection.values()) {
+                	int x=(int) (b.getX() + h.x);
+                	int y= (int) (b.getY() + h.y);
+                    ncounts.merge(new Point2D.Double(x,y), 1, (o, n) -> o + n);
+                }
+            }
+            Set<Point2D> newBlack = new HashSet<>();
+            for (Entry<Point2D, Integer> e : ncounts.entrySet()) {
+                Point2D p = e.getKey();
+                int c = ncounts.get(p);
+                if (black.contains(p)) {
+                    if (c == 1 || c == 2) { newBlack.add(p); }
+                } else {
+                    if (c == 2) { newBlack.add(p); }
+                }
+            }
+            black = newBlack;
+        }
+
+        System.out.println(black.size());
+    }
+    public static void part1() {
+    	Map<Point2D, Integer> counts = new HashMap<>();
+
+        for (String line : lines) {
+            int x = 0;
+            int y = 0;
+            for (int i = 0; i < line.length(); i++) {
+                char c = line.charAt(i);
+                String s = "" + c;
+                if (c == 'n' || c == 's') {
+                    s += line.charAt(i + 1);
+                    i++;
+                }
+
+                HexDirection h = HexDirection.valueOf(s.toUpperCase());
+                x += h.x;
+                y += h.y;
+            }
+			Point2D p=new Point2D.Double(x, y);
+            counts.merge(p, 1, (a, b) -> a + b);
+        }
+
+        int cnt = 0;
+        for (Integer i : counts.values()) {
+            if (i % 2 == 1) { cnt++; }
+        }
+        System.out.println(cnt);
+    }
+}
